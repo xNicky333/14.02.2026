@@ -72,6 +72,15 @@ img {
     from { transform: translateY(-10vh); }
     to { transform: translateY(110vh); }
 }
+
+/* 💥 Fajerwerk serduszek */
+.firework-heart {
+    position: fixed;
+    font-size: 20px;
+    pointer-events: none;
+    opacity: 1;
+    transition: transform 1s ease-out, opacity 1s ease-out;
+}
 </style>
 </head>
 
@@ -85,10 +94,16 @@ img {
 
 <script>
 function yesAnswer() {
-    document.getElementById("content").innerHTML = `
-        <h1>Kocham Cię ❤️</h1>
+    const content = document.getElementById("content");
+
+    // Zmiana zawartości
+    content.innerHTML = `
+        <h1>Kocham Cię Martynka ❤️</h1>
         <img src="piesek.jpg" alt="Nasze zdjęcie">
     `;
+
+    // Wywołanie fajerwerku serduszek
+    launchFireworks();
 }
 
 const noBtn = document.getElementById("no");
@@ -96,8 +111,7 @@ const noBtn = document.getElementById("no");
 let offsetX = 0;
 let offsetY = 0;
 
-noBtn.addEventListener("mouseover", () => {
-
+function moveNo() {
     offsetX += (Math.random() * 60 - 30);
     offsetY += (Math.random() * 40 - 20);
 
@@ -105,10 +119,16 @@ noBtn.addEventListener("mouseover", () => {
     offsetY = Math.max(-60, Math.min(60, offsetY));
 
     noBtn.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
-});
+}
+
+// działa dla myszy
+noBtn.addEventListener("mouseover", moveNo);
+
+// działa dla dotyku na telefonie
+noBtn.addEventListener("touchstart", moveNo);
 
 
-/* ❤️ Generowanie spadających serduszek */
+/* ❤️ Spadające serduszka w tle */
 function createHeart() {
     const heart = document.createElement("div");
     heart.classList.add("heart");
@@ -118,12 +138,42 @@ function createHeart() {
     heart.style.animationDuration = (Math.random() * 3 + 2) + "s";
 
     document.body.appendChild(heart);
-
     setTimeout(() => heart.remove(), 5000);
 }
 
 setInterval(createHeart, 300);
 
+/* 💥 Fajerwerk serduszek */
+function launchFireworks() {
+    const count = 40; // liczba serduszek
+    for (let i = 0; i < count; i++) {
+        const heart = document.createElement("div");
+        heart.classList.add("firework-heart");
+        heart.innerHTML = "❤️";
+
+        // start w losowym miejscu w centrum ekranu
+        const startX = window.innerWidth / 2;
+        const startY = window.innerHeight / 2;
+
+        heart.style.left = startX + "px";
+        heart.style.top = startY + "px";
+
+        document.body.appendChild(heart);
+
+        // losowe przesunięcie w każdą stronę
+        const offsetX = (Math.random() - 0.5) * 600; // rozrzut w poziomie
+        const offsetY = (Math.random() - 0.5) * 600; // rozrzut w pionie
+
+        // małe opóźnienie aby wszystkie nie startowały idealnie równocześnie
+        setTimeout(() => {
+            heart.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(0)`;
+            heart.style.opacity = 0;
+        }, Math.random() * 100);
+
+        // usuń serduszko po animacji
+        setTimeout(() => heart.remove(), 1200);
+    }
+}
 </script>
 
 </body>
