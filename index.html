@@ -60,6 +60,18 @@ img {
     border-radius: 15px;
     box-shadow: 0 0 15px rgba(0,0,0,0.3);
 }
+
+/* ❤️ Spadające serduszka */
+.heart {
+    position: fixed;
+    font-size: 20px;
+    animation: fall linear infinite;
+}
+
+@keyframes fall {
+    from { transform: translateY(-10vh); }
+    to { transform: translateY(110vh); }
+}
 </style>
 </head>
 
@@ -67,7 +79,7 @@ img {
 
 <div class="box" id="content">
     <h1>Czy zostaniesz moją walentynką? ❤️</h1>
-    <button id="yes" onclick="yesAnswer()">TAK 💖</button>
+    <button id="yes" onclick="yesAnswer()">TAK</button>
     <button id="no">NIE</button>
 </div>
 
@@ -94,6 +106,24 @@ noBtn.addEventListener("mouseover", () => {
 
     noBtn.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
 });
+
+
+/* ❤️ Generowanie spadających serduszek */
+function createHeart() {
+    const heart = document.createElement("div");
+    heart.classList.add("heart");
+    heart.innerHTML = "❤️";
+
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.animationDuration = (Math.random() * 3 + 2) + "s";
+
+    document.body.appendChild(heart);
+
+    setTimeout(() => heart.remove(), 5000);
+}
+
+setInterval(createHeart, 300);
+
 </script>
 
 </body>
