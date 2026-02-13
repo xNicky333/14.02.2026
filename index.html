@@ -111,6 +111,7 @@ const noBtn = document.getElementById("no");
 let offsetX = 0;
 let offsetY = 0;
 
+// Funkcja przesuwająca przycisk NIE
 function moveNo() {
     offsetX += (Math.random() * 60 - 30);
     offsetY += (Math.random() * 40 - 20);
@@ -151,7 +152,7 @@ function launchFireworks() {
         heart.classList.add("firework-heart");
         heart.innerHTML = "❤️";
 
-        // start w losowym miejscu w centrum ekranu
+        // start w centrum ekranu
         const startX = window.innerWidth / 2;
         const startY = window.innerHeight / 2;
 
@@ -160,20 +161,67 @@ function launchFireworks() {
 
         document.body.appendChild(heart);
 
-        // losowe przesunięcie w każdą stronę
-        const offsetX = (Math.random() - 0.5) * 600; // rozrzut w poziomie
-        const offsetY = (Math.random() - 0.5) * 600; // rozrzut w pionie
+        const offsetX = (Math.random() - 0.5) * 600;
+        const offsetY = (Math.random() - 0.5) * 600;
 
-        // małe opóźnienie aby wszystkie nie startowały idealnie równocześnie
         setTimeout(() => {
             heart.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(0)`;
             heart.style.opacity = 0;
         }, Math.random() * 100);
 
-        // usuń serduszko po animacji
         setTimeout(() => heart.remove(), 1200);
     }
 }
+
+/* 💡 LICZNIK KLIKNIĘĆ NIE + AHA 😏 */
+
+// Licznik kliknięć NIE
+let noCount = 0;
+
+// Tworzymy element do wyświetlania licznika
+const noCounter = document.createElement("div");
+noCounter.style.marginTop = "10px";
+noCounter.style.fontSize = "18px";
+noCounter.style.fontWeight = "bold";
+noCounter.style.color = "white";
+document.getElementById("content").appendChild(noCounter);
+
+// Funkcja pokazująca napis Aha
+function showAha(x, y) {
+    const aha = document.createElement("div");
+    aha.innerText = "Aha 😏";
+    aha.style.position = "fixed";
+    aha.style.left = x + "px";
+    aha.style.top = y + "px";
+    aha.style.color = "#FFD700"; // złoty/jasny żółty
+    aha.style.textShadow = "2px 2px 4px #000"; // lekki cień dla kontrastu
+    aha.style.fontSize = "20px";
+    aha.style.fontWeight = "bold";
+    aha.style.opacity = 1;
+    aha.style.transition = "all 1s ease-out";
+    document.body.appendChild(aha);
+
+    setTimeout(() => {
+        aha.style.top = (y - 50) + "px";
+        aha.style.opacity = 0;
+    }, 50);
+
+    setTimeout(() => aha.remove(), 1050);
+}
+
+// Obsługa kliknięcia
+noBtn.addEventListener("click", (e) => {
+    noCount++;
+    noCounter.innerText = `Kliknięcia NIE: ${noCount}`;
+    showAha(e.clientX, e.clientY);
+});
+
+// Obsługa dotyku na telefonie
+noBtn.addEventListener("touchstart", (e) => {
+    noCount++;
+    noCounter.innerText = `Kliknięcia NIE: ${noCount}`;
+    showAha(e.touches[0].clientX, e.touches[0].clientY);
+});
 </script>
 
 </body>
